@@ -9,7 +9,7 @@ bool horizontalCompare(){
 
 bool isValidSudoku(char** board, int boardSize, int* boardColSize) {
   
-  int *map=calloc(9, sizeof(int));
+  int map[9]={false};
   int i,j,m,w;
 
   for (i=0; i<boardSize; i++) {
@@ -18,7 +18,6 @@ bool isValidSudoku(char** board, int boardSize, int* boardColSize) {
         continue;
       }
       for (w=0; w<boardSize; w++) {
-        printf("Comaparing j=%d w=%d\n", j,w);
         if (j==w || board[i][w]=='.') {
           continue;
         }
@@ -50,10 +49,9 @@ bool isValidSudoku(char** board, int boardSize, int* boardColSize) {
           }
         }
       }
-      map=calloc(9, sizeof(int));
+      memset(map, 0, sizeof(map));
     }
   }
-  free(map);
   return true;
 }
 
