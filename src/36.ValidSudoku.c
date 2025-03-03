@@ -1,15 +1,73 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-bool horizontalCompare(){
+
+
+
+bool isValidSudokuBits(char** board, int boardSize, int* boardColSize) {
+  int i, j, m, w;
+  
+  // Primero verificamos filas y columnas
+  for (i = 0; i < boardSize; i++) {
+    for (j = 0; j < boardSize; j++) {
+      if (board[i][j] == '.') {
+        continue;
+      }
+      
+      // Verificar fila
+      for (w = 0; w < boardSize; w++) {
+        if (j == w || board[i][w] == '.') {
+          continue;
+        }
+        if (board[i][j] == board[i][w]) {
+          return false;
+        }
+      }
+      
+      // Verificar columna
+      for (m = 0; m < boardSize; m++) {
+        if (i == m || board[m][j] == '.') {
+          continue;        
+        }
+        if (board[i][j] == board[m][j]) {
+          return false;
+        }
+      }
+    }
+  }
+  
+  // Ahora verificamos cada subgrilla de 3x3 usando bits
+  for (int vert = 0; vert < 9; vert += 3) {
+    for (int hori = 0; hori < 9; hori += 3) {
+      uint16_t bits = 0; // Usamos 9 bits, uno para cada número del 1 al 9
+      
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          char cell = board[vert + i][hori + j];
+          if (cell != '.') {
+            int num = cell - '1'; // Convertimos el carácter a un número entre 0 y 8
+            uint16_t bit = 1 << num; // Creamos una máscara de bit para este número
+            
+            // Verificamos si este número ya existe en la subgrilla
+            if (bits & bit) {
+              return false; // El número ya está presente en la subgrilla
+            }
+            
+            // Marcamos el número como presente
+            bits |= bit;
+          }
+        }
+      }
+    }
+  }
+  
   return true;
 }
-
-
 bool isValidSudoku(char** board, int boardSize, int* boardColSize) {
   
-  int map[9]={false};
+  int map[9] = {false};
   int i,j,m,w;
 
   for (i=0; i<boardSize; i++) {
@@ -86,7 +144,7 @@ int main(){
     {'.', '.', '.', '.', '.', '.', '.', '.', '.'},
     {'5', '.', '.', '.', '.', '.', '9', '.', '.'},
     {'.', '.', '.', '.', '.', '.', '.', '5', '.'},
-    {'.', '.', '.', '5', '.', '.', '.', '.', '.'},
+    {'.', '.', '.', '6', '.', '.', '.', '.', '.'},
     {'9', '.', '.', '.', '.', '3', '.', '.', '.'},
     {'.', '.', '6', '.', '.', '.', '.', '.', '.'},
     {'.', '.', '.', '.', '.', '.', '.', '.', '.'}
@@ -98,7 +156,7 @@ int main(){
     }
   }
   
-  sol=isValidSudoku(board, boardSize, &boardColSize);
+  sol=isValidSudokuBits(board, boardSize, &boardColSize);
   
   if (sol) {
     printf("True\n");
