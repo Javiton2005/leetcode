@@ -5,7 +5,7 @@
 
 bool isPalindrome(char* s) {
 
-  int izq=0, der;
+  int izq=0;
   int size=0;
   char *duplicate = malloc(sizeof(char) * (strlen(s) + 1)); 
   if (duplicate == NULL) return false;
@@ -24,16 +24,13 @@ bool isPalindrome(char* s) {
     duplicate[size]=s[i];
     size++;
   }
-
-  der=size-1;
-
-  while (izq<der) {
-    if(duplicate[izq]!=duplicate[der]){
+  size-=1;
+  for (;izq<size;izq++) {
+    if(duplicate[izq]!=duplicate[size]){
       free(duplicate);
       return false;
     }
-    izq++;
-    der--;
+    size-=1;
   }
   
   free(duplicate);
@@ -41,7 +38,7 @@ bool isPalindrome(char* s) {
 }
 int main(){
   
-  char s[]="0P";
+  char s[]="A man, a plan, a canal: Panama";
   int ret=isPalindrome(s);
   
   if (ret) {
