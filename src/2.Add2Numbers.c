@@ -12,7 +12,7 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
 
 }
 
-void main(){
+int main(){
   
   struct ListNode *l1 = malloc(sizeof(struct ListNode));
   struct ListNode *l2 = malloc(sizeof(struct ListNode));
@@ -42,4 +42,6 @@ void main(){
   l23->val = 3;
 
   struct ListNode *l3 = addTwoNumbers(l1, l2);
+
+  return 1;
 }
